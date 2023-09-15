@@ -103,5 +103,5 @@ public class Main extends AppCompatActivity {
 //Todo add image
 //Todo Notes color
 //Todo Upload App
-//Todo logout
+//Todo logout ✓
 
