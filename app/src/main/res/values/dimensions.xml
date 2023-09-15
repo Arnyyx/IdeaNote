@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="padding">30sp</dimen>
+    <dimen name="margin">20sp</dimen>
+
+
+    <dimen name="itemTileTextSize">20sp</dimen>
+    <dimen name="itemSubtitleTextSize">15sp</dimen>
+    <dimen name="itemTimeTextSize">10sp</dimen>
+    <dimen name="itemMargin">7sp</dimen>
+    <dimen name="itemPadding">7sp</dimen>
+
+    <dimen name="title">50sp</dimen>
+    <dimen name="content">15sp</dimen>
+    <dimen name="noteTitle">25sp</dimen>
+
+
+</resources>

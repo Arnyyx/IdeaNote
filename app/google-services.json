@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "910517928210",
+    "project_id": "arny-c40c7",
+    "storage_bucket": "arny-c40c7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:910517928210:android:25487481ffd4b0a17133cb",
+        "android_client_info": {
+          "package_name": "com.example.arny"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "910517928210-e1e2qts961gtb2rdrkm3doe40fjnrd1i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCsq73algdBDlsfe9JXSwCo-X3OJObBXqI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "910517928210-e1e2qts961gtb2rdrkm3doe40fjnrd1i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

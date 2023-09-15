@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="@dimen/padding">
+
+    <ImageView
+        android:src="@drawable/ic_back"
+        android:id="@+id/btnBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SIGN UP"
+        android:textSize="@dimen/title" />
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TableRow>
+            <TextView android:text="Email: " />
+
+            <EditText
+                android:id="@+id/email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:inputType="textCapWords" />
+        </TableRow>
+
+        <TableRow>
+            <TextView android:text="Password: " />
+
+            <EditText
+                android:id="@+id/password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:inputType="textPassword" />
+        </TableRow>
+
+        <TableRow>
+            <TextView android:text="Confirm Password: " />
+
+            <EditText
+                android:id="@+id/confirmPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:inputType="textPassword" />
+        </TableRow>
+
+        <Button
+            android:id="@+id/btnSignUp"
+            android:text="Sign Up" />
+
+        <TableRow>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_marginVertical="@dimen/padding"
+                android:text="Already have an acount?. " />
+
+            <TextView
+                android:id="@+id/textSignIn"
+                android:layout_width="wrap_content"
+                android:layout_marginVertical="@dimen/padding"
+                android:text="Sign In"
+                android:textColor="@color/purple_200" />
+        </TableRow>
+    </TableLayout>
+
+
+</LinearLayout>

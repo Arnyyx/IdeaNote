@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:padding="@dimen/padding"
+    tools:context=".Controller.NoteDetail">
+
+    <ImageView
+        android:src="@drawable/ic_back"
+        android:id="@+id/btnBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <ImageView
+        android:src="@drawable/ic_colors"
+        android:id="@+id/btnColor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin"
+        android:layout_toStartOf="@+id/btnDelete" />
+
+    <ImageView
+        android:src="@drawable/ic_delete"
+        android:id="@+id/btnDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin"
+        android:layout_toStartOf="@+id/btnUndo" />
+
+    <ImageView
+        android:src="@drawable/ic_undo"
+        android:id="@+id/btnUndo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin"
+        android:layout_toStartOf="@+id/btnRedo" />
+
+    <ImageView
+        android:src="@drawable/ic_redo"
+        android:id="@+id/btnRedo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin"
+        android:layout_toStartOf="@+id/btnSave" />
+
+    <ImageView
+        android:src="@drawable/ic_check"
+        android:id="@+id/btnSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true" />
+
+
+    <EditText
+        android:id="@+id/noteTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnBack"
+        android:layout_marginTop="@dimen/margin"
+        android:background="@color/transparent"
+        android:hint="Note title"
+        android:inputType="text"
+        android:maxLines="1"
+        android:textSize="@dimen/noteTitle" />
+
+    <TextView
+        android:id="@+id/noteTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/noteTitle"
+        android:layout_marginVertical="@dimen/itemMargin"
+        android:background="@color/transparent"
+        android:gravity="top"
+        android:hint="Time"
+        android:inputType="none"
+        android:textSize="@dimen/content" />
+
+    <EditText
+        android:id="@+id/noteSubtile"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/noteTime"
+        android:background="@color/transparent"
+        android:gravity="top"
+        android:hint="Note subtitle" />
+</RelativeLayout>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/padding">
+
+    <ImageView
+        android:src="@drawable/ic_back"
+        android:id="@+id/btnBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/style"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnBack"
+        android:layout_marginTop="@dimen/margin"
+        android:text="Style"
+        android:textSize="@dimen/noteTitle" />
+
+    <LinearLayout
+        android:id="@+id/styleLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/style"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Text Size"
+            android:textSize="@dimen/content" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="todo" />
+        <!--Todo setting-->
+    </LinearLayout>
+
+    <View
+        android:id="@+id/divider"
+        style="@style/Divider"
+        android:layout_below="@+id/styleLayout"
+        android:layout_marginTop="@dimen/margin" />
+
+    <TextView
+        android:id="@+id/signOut"
+        android:textColor="@color/red"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/divider"
+        android:layout_marginTop="@dimen/margin"
+        android:text="SIGN OUT"
+        android:textSize="@dimen/noteTitle" />
+
+</RelativeLayout>
