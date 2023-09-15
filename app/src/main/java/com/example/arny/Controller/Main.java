@@ -35,7 +35,6 @@ public class Main extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-
         main = this;
 
         recyclerView = findViewById(R.id.recyclerView);
@@ -56,15 +55,24 @@ public class Main extends AppCompatActivity {
         EditText editSearch = findViewById(R.id.editSearch);
         String stringSearch = editSearch.getText().toString();
 
-        if (stringSearch.equals("")) return;
+        if (stringSearch.equals("")) {
+            setUpRecyclerView();
+            noteAdapter.startListening();
+            noteAdapter.notifyDataSetChanged();
+            return;
+        }
 
-        Query query = Utility.getCollectionReferenceForNotes().whereEqualTo("title", "eeggx");
+        Query query = Utility.getCollectionReferenceForNotes().orderBy("title").startAt(stringSearch).endAt(stringSearch + '~');
+        ;
         FirestoreRecyclerOptions<Note> options = new FirestoreRecyclerOptions.Builder<Note>()
                 .setQuery(query, Note.class).build();
 
         recyclerView.setLayoutManager(new GridLayoutManager(this, spanCount));
         noteAdapter = new NoteAdapter(options, this);
+
         recyclerView.setAdapter(noteAdapter);
+        noteAdapter.startListening();
+        noteAdapter.notifyDataSetChanged();
     }
 
     void setUpRecyclerView() {
@@ -81,18 +89,21 @@ public class Main extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         noteAdapter.startListening();
+        Toast.makeText(main, "Start", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         noteAdapter.stopListening();
+        Toast.makeText(main, "Stop", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         noteAdapter.notifyDataSetChanged();
+        Toast.makeText(main, "Resume", Toast.LENGTH_SHORT).show();
     }
 
 }
