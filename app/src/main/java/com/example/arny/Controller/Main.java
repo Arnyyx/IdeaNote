@@ -89,21 +89,18 @@ public class Main extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         noteAdapter.startListening();
-        Toast.makeText(main, "Start", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         noteAdapter.stopListening();
-        Toast.makeText(main, "Stop", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         noteAdapter.notifyDataSetChanged();
-        Toast.makeText(main, "Resume", Toast.LENGTH_SHORT).show();
     }
 
 }
@@ -117,5 +114,5 @@ public class Main extends AppCompatActivity {
 //Todo add image
 //Todo Notes color
 //Todo Upload App
-//Todo logout
+//Todo logout ✓
 
