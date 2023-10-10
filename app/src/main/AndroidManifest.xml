@@ -19,9 +19,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".Controller.Main"
-            android:launchMode="singleInstance" />
+        <activity android:name=".Controller.Main" />
         <activity android:name=".Controller.SignIn" />
         <activity android:name=".Controller.SignUp" />
         <activity android:name=".Controller.NoteDetail" />

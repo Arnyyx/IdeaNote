@@ -3,25 +3,27 @@ package com.example.arny.Controller;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.EditText;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.arny.Adapters.NoteAdapter;
+import com.example.arny.Database.FireStore;
 import com.example.arny.Model.Note;
 import com.example.arny.R;
-import com.example.arny.Utils.Utility;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.firebase.firestore.Query;
+
+import java.util.List;
 
 public class Main extends AppCompatActivity {
-    RecyclerView recyclerView;
+    private RecyclerView recyclerView;
     NoteAdapter noteAdapter;
-    int spanCount = 2;
     public static Activity main;
+    SwipeRefreshLayout swipeRefreshLayout;
+    FireStore fireStore;
+    List<Note> noteList;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -30,68 +32,35 @@ public class Main extends AppCompatActivity {
         main = this;
 
         recyclerView = findViewById(R.id.recyclerView);
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
 
-        findViewById(R.id.btnSetLayout).setOnClickListener(view -> {
-            //Todo setlayout
-        });
-        findViewById(R.id.btnNew).setOnClickListener(view -> startActivity(new Intent(this, NoteDetail.class)));
-        findViewById(R.id.btnSetting).setOnClickListener(view -> startActivity(new Intent(this, Settings.class)));
-        findViewById(R.id.ic_search).setOnClickListener(view -> search());
+        fireStore = new FireStore();
+        noteList = fireStore.getAllDoc("timestamp");
 
         setUpRecyclerView();
-    }
 
-    private void search() {
-        //Todo search
-        EditText editSearch = findViewById(R.id.editSearch);
-        String stringSearch = editSearch.getText().toString();
+        findViewById(R.id.btnNew).setOnClickListener(view -> startActivity(new Intent(this, NoteDetail.class)));
+        findViewById(R.id.btnSetting).setOnClickListener(view -> startActivity(new Intent(this, Settings.class)));
+        findViewById(R.id.ic_search).setOnClickListener(view -> {
+        });
 
-        if (stringSearch.equals("")) {
+        swipeRefreshLayout.setOnRefreshListener(() -> {
             setUpRecyclerView();
-            noteAdapter.startListening();
-            noteAdapter.notifyDataSetChanged();
-            return;
-        }
-
-        Query query = Utility.getCollectionReferenceForNotes().orderBy("title", Query.Direction.DESCENDING).startAt(stringSearch).endAt(stringSearch + '~');
-        FirestoreRecyclerOptions<Note> options = new FirestoreRecyclerOptions.Builder<Note>().setQuery(query, Note.class).build();
-
-        recyclerView.setLayoutManager(new GridLayoutManager(this, spanCount));
-        noteAdapter = new NoteAdapter(options, this);
-
-        recyclerView.setAdapter(noteAdapter);
-        noteAdapter.startListening();
-        noteAdapter.notifyDataSetChanged();
+            swipeRefreshLayout.setRefreshing(false);
+        });
     }
 
-    void setUpRecyclerView() {
-        Query query = Utility.getCollectionReferenceForNotes().orderBy("timestamp", Query.Direction.DESCENDING);
-        FirestoreRecyclerOptions<Note> options = new FirestoreRecyclerOptions.Builder<Note>()
-                .setQuery(query, Note.class).build();
-        recyclerView.setLayoutManager(new GridLayoutManager(this, spanCount));
-        noteAdapter = new NoteAdapter(options, this);
+    private void setUpRecyclerView() {
+        noteAdapter = new NoteAdapter(this, noteList);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         recyclerView.setAdapter(noteAdapter);
     }
-
 
     @Override
     protected void onStart() {
         super.onStart();
-        noteAdapter.startListening();
+        noteAdapter.starli
     }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        noteAdapter.stopListening();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        noteAdapter.notifyDataSetChanged();
-    }
-
 }
 
 //Todo Item ClickListener ✓
@@ -103,5 +72,5 @@ public class Main extends AppCompatActivity {
 //Todo add image
 //Todo Notes color
 //Todo Upload App
+//Todo Upload Photo
 //Todo logout ✓
-

@@ -11,9 +11,11 @@ import java.util.Locale;
 
 public class Utility {
     public static CollectionReference getCollectionReferenceForNotes() {
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        return FirebaseFirestore.getInstance().collection("Users").
-                document(currentUser.getUid()).collection("Notes");
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        CollectionReference collectionReference = FirebaseFirestore.getInstance().collection("Users")
+                .document(uid)
+                .collection("Notes");
+        return collectionReference;
     }
 
     public static String timeStampToString(Timestamp timestamp) {

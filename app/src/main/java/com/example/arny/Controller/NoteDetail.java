@@ -1,98 +1,48 @@
 package com.example.arny.Controller;
 
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
+import com.example.arny.Database.FireStore;
 import com.example.arny.Model.Note;
 import com.example.arny.R;
 import com.example.arny.Utils.Utility;
 import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.DocumentReference;
 
 public class NoteDetail extends AppCompatActivity {
-
-    EditText editTitle, editSubtitle;
-    TextView editNoteTime;
-    String title, subtitle, docID, timestamp;
-    boolean isEdit = false;
-    ImageView btnDelte;
+    private TextView title, time, subtitle;
+    private int color;
+    private FireStore fireStore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.note_detail);
 
+        title = findViewById(R.id.noteTitle);
+        time = findViewById(R.id.noteTime);
+        subtitle = findViewById(R.id.noteSubtile);
+        color = ContextCompat.getColor(this, R.color.black);
+        fireStore = new FireStore();
 
-        editTitle = findViewById(R.id.noteTitle);
-        editSubtitle = findViewById(R.id.noteSubtile);
-        editNoteTime = findViewById(R.id.noteTime);
-        btnDelte = findViewById(R.id.btnDelete);
+        time.setText(Utility.timeStampToString(Timestamp.now()));
 
-        btnDelte.setVisibility(View.INVISIBLE);
-        editNoteTime.setText(Utility.timeStampToString(Timestamp.now()));
 
-        title = getIntent().getStringExtra("title");
-        subtitle = getIntent().getStringExtra("subtitle");
-        timestamp = getIntent().getStringExtra("timestamp");
-        docID = getIntent().getStringExtra("docID");
-
-        if (docID != null && !docID.isEmpty()) {
-            isEdit = true;
-            editTitle.setText(title);
-            editSubtitle.setText(subtitle);
-            editNoteTime.setText(timestamp);
-            btnDelte.setVisibility(View.VISIBLE);
-        }
-
-        btnDelte.setOnClickListener(view -> deleteNote());
-        findViewById(R.id.btnBack).setOnClickListener(view -> onBackPressed());
         findViewById(R.id.btnSave).setOnClickListener(view -> saveNote());
+
+        findViewById(R.id.view).setBackgroundColor(color);
     }
 
-    private void deleteNote() {
-        DocumentReference documentReference;
-        documentReference = Utility.getCollectionReferenceForNotes().document(docID);
-
-        documentReference.delete().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                Toast.makeText(NoteDetail.this, "Delete successfully", Toast.LENGTH_SHORT).show();
-                finish();
-            } else Toast.makeText(NoteDetail.this, "Delete failed", Toast.LENGTH_SHORT).show();
-        });
-    }
-
-    void saveNote() {
-        String title = editTitle.getText().toString();
-        String subTitle = editSubtitle.getText().toString();
-
+    private void saveNote() {
         Note note = new Note();
-        note.setTitle(title);
-        note.setSubtitle(subTitle);
+        note.setTitle(title.getText().toString());
+        note.setSubtitle(subtitle.getText().toString());
         note.setTimestamp(Timestamp.now());
-
-        saveToFirebase(note);
-    }
-
-    void saveToFirebase(Note note) {
-        DocumentReference documentReference;
-        if (isEdit)
-            documentReference = Utility.getCollectionReferenceForNotes().document(docID);
-        else
-            documentReference = Utility.getCollectionReferenceForNotes().document();
-
-
-        documentReference.set(note).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                Toast.makeText(NoteDetail.this, "Save successfully", Toast.LENGTH_SHORT).show();
-                finish();
-            } else Toast.makeText(NoteDetail.this, "Save failed", Toast.LENGTH_SHORT).show();
-        });
+        note.setColor(String.valueOf(color));
+        fireStore.setDoc(this, note);
+        finish();
     }
 }

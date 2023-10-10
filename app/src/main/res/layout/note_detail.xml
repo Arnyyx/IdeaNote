@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     android:padding="@dimen/padding"
     tools:context=".Controller.NoteDetail">
 
@@ -62,8 +61,7 @@
         android:layout_marginTop="@dimen/margin"
         android:background="@color/transparent"
         android:hint="Note title"
-        android:inputType="text"
-        android:maxLines="1"
+        android:inputType="textCapSentences"
         android:textSize="@dimen/noteTitle" />
 
     <TextView
@@ -85,5 +83,6 @@
         android:layout_below="@+id/noteTime"
         android:background="@color/transparent"
         android:gravity="top"
-        android:hint="Note subtitle" />
+        android:hint="Note subtitle"
+        android:inputType="textCapSentences" />
 </RelativeLayout>
