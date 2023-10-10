@@ -43,18 +43,10 @@ public class SignIn extends AppCompatActivity {
         String email = editEmail.getText().toString().trim();
         String password = editPassword.getText().toString();
 
-        auth.signInWithEmailAndPassword(email, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-            @Override
-            public void onSuccess(AuthResult authResult) {
-                Toast.makeText(SignIn.this, "Sign in successfully", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(SignIn.this, Main.class));
-                finish();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(SignIn.this, "Sign in failed", Toast.LENGTH_SHORT).show();
-            }
-        });
+        auth.signInWithEmailAndPassword(email, password).addOnSuccessListener(authResult -> {
+            Toast.makeText(SignIn.this, "Sign in successfully", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(SignIn.this, Main.class));
+            finish();
+        }).addOnFailureListener(e -> Toast.makeText(SignIn.this, "Sign in failed", Toast.LENGTH_SHORT).show());
     }
 }

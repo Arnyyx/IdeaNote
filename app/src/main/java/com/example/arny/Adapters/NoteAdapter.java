@@ -11,67 +11,63 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.arny.Controller.Main;
 import com.example.arny.Controller.NoteDetail;
 import com.example.arny.Model.Note;
 import com.example.arny.R;
 import com.example.arny.Utils.Utility;
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
-import java.util.Random;
+import java.util.List;
 
 
-public class NoteAdapter extends FirestoreRecyclerAdapter<Note, NoteAdapter.noteViewholder> {
+public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewholder> {
 
-    Context context;
+    private Context context;
+    private List<Note> noteList;
 
-    public NoteAdapter(@NonNull FirestoreRecyclerOptions<Note> options, Context context) {
-        super(options);
+    public NoteAdapter(Context context, List<Note> noteList) {
         this.context = context;
-    }
-
-    @Override
-    protected void
-    onBindViewHolder(@NonNull noteViewholder holder, int position, @NonNull Note note) {
-        int[] androidColors = holder.itemView.getResources().getIntArray(R.array.itemColor);
-        int randomAndroidColor = androidColors[new Random().nextInt(androidColors.length)];
-        holder.itemView.setBackgroundColor(randomAndroidColor);
-
-        holder.title.setText(note.getTitle());
-        holder.time.setText(Utility.timeStampToString(note.getTimestamp()));
-        holder.subtitle.setText(note.getSubtitle());
-
-        holder.itemView.setOnClickListener(view -> {
-            Intent intent = new Intent(context, NoteDetail.class);
-            intent.putExtra("title", note.getTitle());
-            intent.putExtra("subtitle", note.getSubtitle());
-            intent.putExtra("timestamp", Utility.timeStampToString(note.getTimestamp()));
-            String docID = this.getSnapshots().getSnapshot(position).getId();
-            intent.putExtra("docID", docID);
-            context.startActivity(intent);
-        });
+        this.noteList = noteList;
     }
 
     @NonNull
     @Override
-    public noteViewholder
-    onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
+    public NoteAdapter.NoteViewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.note_item, parent, false);
-        return new NoteAdapter.noteViewholder(view);
+        return new NoteViewholder(itemView);
     }
 
-    class noteViewholder extends RecyclerView.ViewHolder {
-        TextView title, subtitle, time;
+    @Override
+    public void onBindViewHolder(@NonNull NoteAdapter.NoteViewholder holder, int position) {
+        Note note = noteList.get(position);
+        holder.noteTitleTextView.setText(note.getTitle());
+        holder.noteTimeTextView.setText(Utility.timeStampToString(note.getTimestamp()));
+        holder.noteSubtitleTextView.setText(note.getSubtitle());
+//        holder.itemView.setBackgroundColor(Color.parseColor(note.getColor()));
+        holder.itemView.setOnClickListener(view -> {
+            Intent intent = new Intent(context, NoteDetail.class);
+            intent.putExtra("title", note.getTitle());
+            intent.putExtra("time", Utility.timeStampToString(note.getTimestamp()));
+            intent.putExtra("subtitle", note.getSubtitle());
+            intent.putExtra("color", note.getColor());
+            context.startActivity(intent);
+        });
+    }
 
-        public noteViewholder(@NonNull View itemView) {
+    @Override
+    public int getItemCount() {
+        return noteList.size();
+    }
+
+    public static class NoteViewholder extends RecyclerView.ViewHolder {
+        public TextView noteTitleTextView, noteTimeTextView, noteSubtitleTextView;
+
+        public NoteViewholder(@NonNull View itemView) {
             super(itemView);
-            title = itemView.findViewById(R.id.noteTitleTextView);
-            subtitle = itemView.findViewById(R.id.noteSubtitleTextView);
-            time = itemView.findViewById(R.id.noteTimeTextView);
+            noteTitleTextView = itemView.findViewById(R.id.noteTitleTextView);
+            noteTimeTextView = itemView.findViewById(R.id.noteTimeTextView);
+            noteSubtitleTextView = itemView.findViewById(R.id.noteSubtitleTextView);
         }
     }
-
 }
 

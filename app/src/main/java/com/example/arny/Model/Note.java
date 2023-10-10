@@ -1,22 +1,19 @@
 package com.example.arny.Model;
 
-import android.graphics.Color;
-
 import com.google.firebase.Timestamp;
 
 public class Note {
-    String title, subtitle;
+    String title, subtitle, color;
     Timestamp timestamp;
-    Color color;
 
     public Note() {
     }
 
-    public Color getColor() {
+    public String getColor() {
         return color;
     }
 
-    public void setColor(Color color) {
+    public void setColor(String color) {
         this.color = color;
     }
 
