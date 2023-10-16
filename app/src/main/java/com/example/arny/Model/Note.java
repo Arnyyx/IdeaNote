@@ -3,18 +3,18 @@ package com.example.arny.Model;
 import com.google.firebase.Timestamp;
 
 public class Note {
-    String title, subtitle, color;
+    String id, title, subtitle;
     Timestamp timestamp;
 
     public Note() {
     }
 
-    public String getColor() {
-        return color;
+    public String getId() {
+        return id;
     }
 
-    public void setColor(String color) {
-        this.color = color;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getTitle() {
