@@ -3,7 +3,10 @@ package com.example.arny.Controller;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -14,6 +17,10 @@ import com.example.arny.Adapters.NoteAdapter;
 import com.example.arny.Database.FireStore;
 import com.example.arny.Model.Note;
 import com.example.arny.R;
+import com.example.arny.Utils.Utility;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.Query;
 
 import java.util.List;
 
@@ -22,8 +29,8 @@ public class Main extends AppCompatActivity {
     NoteAdapter noteAdapter;
     public static Activity main;
     SwipeRefreshLayout swipeRefreshLayout;
-    FireStore fireStore;
     List<Note> noteList;
+    FireStore fireStore;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -33,9 +40,7 @@ public class Main extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recyclerView);
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
-
         fireStore = new FireStore();
-        noteList = fireStore.getAllDoc("timestamp");
 
         setUpRecyclerView();
 
@@ -48,18 +53,51 @@ public class Main extends AppCompatActivity {
             setUpRecyclerView();
             swipeRefreshLayout.setRefreshing(false);
         });
+
     }
 
     private void setUpRecyclerView() {
-        noteAdapter = new NoteAdapter(this, noteList);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-        recyclerView.setAdapter(noteAdapter);
+        fireStore.getAllDoc("timestamp", new FireStore.OnGetDataListener() {
+            @Override
+            public void onSuccess(List<Note> noteList) {
+                noteAdapter = new NoteAdapter(Main.this, noteList);
+                recyclerView.setLayoutManager(new GridLayoutManager(Main.this, 2));
+                recyclerView.setAdapter(noteAdapter);
+            }
+
+            @Override
+            public void onStart() {
+            }
+
+            @Override
+            public void onFailure() {
+                Toast.makeText(Main.this, "Load data failed", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        Query query = Utility.getCollectionReferenceForNotes().orderBy("timestamp");
+        FirestoreRecyclerOptions<Note> options = new FirestoreRecyclerOptions.Builder<Note>()
+                .setQuery(query, Note.class).build();
+        FirestoreRecyclerAdapter adapter = new FirestoreRecyclerAdapter(options) {
+            @Override
+            protected void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position, @NonNull Object model) {
+
+            }
+
+            @NonNull
+            @Override
+            public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                return null;
+            }
+        }
+
     }
 
+
     @Override
-    protected void onStart() {
-        super.onStart();
-        noteAdapter.starli
+    protected void onResume() {
+        super.onResume();
+        setUpRecyclerView();
     }
 }
 
