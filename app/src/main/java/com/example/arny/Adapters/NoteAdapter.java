@@ -11,15 +11,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.arny.Controller.Main;
 import com.example.arny.Controller.NoteDetail;
 import com.example.arny.Model.Note;
 import com.example.arny.R;
 import com.example.arny.Utils.Utility;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-
-import java.util.Random;
 
 
 public class NoteAdapter extends FirestoreRecyclerAdapter<Note, NoteAdapter.noteViewholder> {
@@ -34,10 +31,6 @@ public class NoteAdapter extends FirestoreRecyclerAdapter<Note, NoteAdapter.note
     @Override
     protected void
     onBindViewHolder(@NonNull noteViewholder holder, int position, @NonNull Note note) {
-        int[] androidColors = holder.itemView.getResources().getIntArray(R.array.itemColor);
-        int randomAndroidColor = androidColors[new Random().nextInt(androidColors.length)];
-        holder.itemView.setBackgroundColor(randomAndroidColor);
-
         holder.title.setText(note.getTitle());
         holder.time.setText(Utility.timeStampToString(note.getTimestamp()));
         holder.subtitle.setText(note.getSubtitle());

@@ -3,10 +3,7 @@ package com.example.arny.Controller;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,12 +15,7 @@ import com.example.arny.Model.Note;
 import com.example.arny.R;
 import com.example.arny.Utils.Utility;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-
-import java.util.Arrays;
 
 public class Main extends AppCompatActivity {
     RecyclerView recyclerView;
@@ -47,7 +39,6 @@ public class Main extends AppCompatActivity {
         findViewById(R.id.ic_search).setOnClickListener(view -> search());
 
         setUpRecyclerView();
-
     }
 
     private void search() {
@@ -62,10 +53,8 @@ public class Main extends AppCompatActivity {
             return;
         }
 
-        Query query = Utility.getCollectionReferenceForNotes().orderBy("title").startAt(stringSearch).endAt(stringSearch + '~');
-        ;
-        FirestoreRecyclerOptions<Note> options = new FirestoreRecyclerOptions.Builder<Note>()
-                .setQuery(query, Note.class).build();
+        Query query = Utility.getCollectionReferenceForNotes().orderBy("title", Query.Direction.DESCENDING).startAt(stringSearch).endAt(stringSearch + '~');
+        FirestoreRecyclerOptions<Note> options = new FirestoreRecyclerOptions.Builder<Note>().setQuery(query, Note.class).build();
 
         recyclerView.setLayoutManager(new GridLayoutManager(this, spanCount));
         noteAdapter = new NoteAdapter(options, this);
@@ -89,21 +78,18 @@ public class Main extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         noteAdapter.startListening();
-        Toast.makeText(main, "Start", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         noteAdapter.stopListening();
-        Toast.makeText(main, "Stop", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         noteAdapter.notifyDataSetChanged();
-        Toast.makeText(main, "Resume", Toast.LENGTH_SHORT).show();
     }
 
 }

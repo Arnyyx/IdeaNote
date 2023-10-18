@@ -29,6 +29,7 @@ public class NoteDetail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.note_detail);
 
+
         editTitle = findViewById(R.id.noteTitle);
         editSubtitle = findViewById(R.id.noteSubtile);
         editNoteTime = findViewById(R.id.noteTime);
