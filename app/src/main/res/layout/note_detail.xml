@@ -60,8 +60,9 @@
         android:layout_below="@+id/btnBack"
         android:layout_marginTop="@dimen/margin"
         android:background="@color/transparent"
-        android:hint="Note title"
-        android:inputType="textCapSentences"
+        android:hint="Note title..."
+        android:inputType="textCapSentences|textMultiLine"
+        android:maxLines="5"
         android:textSize="@dimen/noteTitle" />
 
     <TextView
@@ -83,6 +84,6 @@
         android:layout_below="@+id/noteTime"
         android:background="@color/transparent"
         android:gravity="top"
-        android:hint="Note subtitle"
-        android:inputType="textCapSentences" />
+        android:hint="Note subtitle..."
+        android:inputType="textCapSentences |textMultiLine" />
 </RelativeLayout>

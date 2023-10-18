@@ -1,14 +1,16 @@
 package com.example.arny.Model;
 
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.Exclude;
 
 public class Note {
-    String id, title, subtitle;
-    Timestamp timestamp;
+    private String id, title, subtitle;
+    private Timestamp timestamp;
 
     public Note() {
     }
 
+    @Exclude
     public String getId() {
         return id;
     }

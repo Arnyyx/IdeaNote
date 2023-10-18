@@ -1,8 +1,10 @@
 package com.example.arny.Utils;
 
+import android.app.Activity;
+import android.view.inputmethod.InputMethodManager;
+
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -21,4 +23,5 @@ public class Utility {
     public static String timeStampToString(Timestamp timestamp) {
         return new SimpleDateFormat("HH:mm - dd/MM/yyyy", Locale.getDefault()).format(timestamp.toDate());
     }
+
 }
