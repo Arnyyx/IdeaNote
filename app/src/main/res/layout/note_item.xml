@@ -16,17 +16,20 @@
         android:textSize="@dimen/itemTileTextSize" />
 
     <TextView
-        android:id="@+id/noteTimeTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="@dimen/itemMargin"
-        android:text="Time"
-        android:textSize="@dimen/itemTimeTextSize" />
-
-    <TextView
         android:id="@+id/noteSubtitleTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/itemMargin"
+        android:ellipsize="end"
+        android:maxLines="5"
         android:text="Note subtitle"
         android:textSize="@dimen/itemSubtitleTextSize" />
+
+    <TextView
+        android:id="@+id/noteTimeTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin"
+        android:text="Time"
+        android:textSize="@dimen/itemTimeTextSize" />
 </LinearLayout>

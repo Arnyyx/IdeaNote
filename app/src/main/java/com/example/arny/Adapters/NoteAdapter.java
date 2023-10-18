@@ -9,18 +9,18 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.arny.Controller.NoteDetail;
 import com.example.arny.Model.Note;
 import com.example.arny.R;
 import com.example.arny.Utils.Utility;
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 
 import java.util.List;
 
 
-public class NoteAdapter extends FirestoreRecyclerAdapter<> {
+public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewholder> {
 
     private Context context;
     private List<Note> noteList;
@@ -48,12 +48,13 @@ public class NoteAdapter extends FirestoreRecyclerAdapter<> {
             Utility.getCollectionReferenceForNotes().document().getId();
             Intent intent = new Intent(context, NoteDetail.class);
             intent.putExtra("isEdit", 1);
+            intent.putExtra("docID", note.getId());
             intent.putExtra("title", note.getTitle());
             intent.putExtra("time", Utility.timeStampToString(note.getTimestamp()));
             intent.putExtra("subtitle", note.getSubtitle());
-            intent.putExtra("color", note.getColor());
             context.startActivity(intent);
         });
+        holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.gray));
     }
 
     @Override

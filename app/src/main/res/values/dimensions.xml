@@ -8,7 +8,7 @@
     <dimen name="itemSubtitleTextSize">15sp</dimen>
     <dimen name="itemTimeTextSize">10sp</dimen>
     <dimen name="itemMargin">7sp</dimen>
-    <dimen name="itemPadding">7sp</dimen>
+    <dimen name="itemPadding">10sp</dimen>
 
     <dimen name="title">50sp</dimen>
     <dimen name="content">15sp</dimen>

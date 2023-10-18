@@ -31,6 +31,7 @@ public class FireStore {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             Note note = new Note();
+                            note.setId(document.getId());
                             note.setTitle(document.getString("title"));
                             note.setSubtitle(document.getString("subtitle"));
                             note.setTimestamp(document.getTimestamp("timestamp"));
@@ -48,11 +49,9 @@ public class FireStore {
         CollectionReference collectionReference = Utility.getCollectionReferenceForNotes();
 
         Map<String, Object> data = new HashMap<>();
-        data.put("id", note.getId());
         data.put("title", note.getTitle());
         data.put("subtitle", note.getSubtitle());
         data.put("timestamp", note.getTimestamp());
-        data.put("color", note.getColor());
 
         DocumentReference documentReference = collectionReference.document();
         documentReference.set(data)
@@ -60,8 +59,10 @@ public class FireStore {
                 .addOnFailureListener(e -> Toast.makeText(context, "Note is note saved", Toast.LENGTH_SHORT).show());
     }
 
-    public static void deleteDoc(String documentId) {
-        Utility.getCollectionReferenceForNotes().document(documentId).delete();
+    public void deleteDoc(Context context, String documentId) {
+        Utility.getCollectionReferenceForNotes().document(documentId).delete()
+                .addOnCompleteListener(task -> Toast.makeText(context, "Note deleted", Toast.LENGTH_SHORT).show())
+                .addOnFailureListener(e -> Toast.makeText(context, "Note is not deleted", Toast.LENGTH_SHORT).show());
     }
 
 
