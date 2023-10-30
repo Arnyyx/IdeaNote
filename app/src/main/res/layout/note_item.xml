@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/itemMargin"
+    android:background="@drawable/item_background"
     android:orientation="vertical"
     android:padding="@dimen/itemPadding">
 
@@ -11,9 +12,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ellipsize="end"
-        android:maxLines="1"
+        android:maxLines="5"
         android:text="Note title"
-        android:textSize="@dimen/itemTileTextSize" />
+        android:textSize="@dimen/itemTileTextSize"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/noteSubtitleTextView"

@@ -1,15 +1,12 @@
 package com.example.arny.Database;
 
 
-import static android.content.ContentValues.TAG;
-
 import android.content.Context;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.example.arny.Model.Note;
+import com.example.arny.R;
 import com.example.arny.Utils.Utility;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -39,30 +36,32 @@ public class FireStore {
                         }
                         listener.onSuccess(noteList);
                     } else {
-                        Log.d(TAG, "Error getting documents: ", task.getException());
                         listener.onFailure();
                     }
                 });
     }
 
-    public void setDoc(Context context, Note note) {
-        CollectionReference collectionReference = Utility.getCollectionReferenceForNotes();
-
+    public void setDoc(Context context, Note note, String docID) {
         Map<String, Object> data = new HashMap<>();
         data.put("title", note.getTitle());
         data.put("subtitle", note.getSubtitle());
         data.put("timestamp", note.getTimestamp());
 
-        DocumentReference documentReference = collectionReference.document();
+        DocumentReference documentReference;
+        if (docID == null)
+            documentReference = Utility.getCollectionReferenceForNotes().document();
+        else
+            documentReference = Utility.getCollectionReferenceForNotes().document(docID);
+
         documentReference.set(data)
-                .addOnCompleteListener(task -> Toast.makeText(context, "Note saved", Toast.LENGTH_SHORT).show())
-                .addOnFailureListener(e -> Toast.makeText(context, "Note is note saved", Toast.LENGTH_SHORT).show());
+                .addOnCompleteListener(task -> Toast.makeText(context, R.string.note_saved, Toast.LENGTH_SHORT).show())
+                .addOnFailureListener(e -> Toast.makeText(context, R.string.note_is_note_saved, Toast.LENGTH_SHORT).show());
     }
 
     public void deleteDoc(Context context, String documentId) {
         Utility.getCollectionReferenceForNotes().document(documentId).delete()
-                .addOnCompleteListener(task -> Toast.makeText(context, "Note deleted", Toast.LENGTH_SHORT).show())
-                .addOnFailureListener(e -> Toast.makeText(context, "Note is not deleted", Toast.LENGTH_SHORT).show());
+                .addOnCompleteListener(task -> Toast.makeText(context, R.string.note_deleted, Toast.LENGTH_SHORT).show())
+                .addOnFailureListener(e -> Toast.makeText(context, R.string.note_is_not_deleted, Toast.LENGTH_SHORT).show());
     }
 
 

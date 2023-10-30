@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.arny.Controller.NoteDetail;
@@ -54,7 +53,6 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewholder
             intent.putExtra("subtitle", note.getSubtitle());
             context.startActivity(intent);
         });
-        holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.gray));
     }
 
     @Override
