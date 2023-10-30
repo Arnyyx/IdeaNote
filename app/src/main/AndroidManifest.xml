@@ -25,5 +25,4 @@
         <activity android:name=".Controller.NoteDetail" />
         <activity android:name=".Controller.Settings" />
     </application>
-
 </manifest>

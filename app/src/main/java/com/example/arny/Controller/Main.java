@@ -1,6 +1,5 @@
 package com.example.arny.Controller;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,12 +10,15 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.arny.Adapters.NoteAdapter;
@@ -24,6 +26,7 @@ import com.example.arny.Database.FireStore;
 import com.example.arny.Model.Note;
 import com.example.arny.R;
 import com.example.arny.Utils.Utility;
+import com.facebook.shimmer.ShimmerFrameLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,27 +34,42 @@ import java.util.List;
 public class Main extends AppCompatActivity {
     private RecyclerView recyclerView;
     private NoteAdapter noteAdapter;
-    public static Activity main;
     private SwipeRefreshLayout swipeRefreshLayout;
     private FireStore fireStore;
     private EditText editSearch;
-    private ImageView btnClear;
+    private ImageView btnClear, btnSetLayout;
+    private ShimmerFrameLayout shimmerLayout;
+    private RecyclerView.LayoutManager layout = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+    public static int dataChange = 0;
+    private TextView tvEmpty;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        main = this;
 
         recyclerView = findViewById(R.id.recyclerView);
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
         btnClear = findViewById(R.id.btnClear);
+        btnSetLayout = findViewById(R.id.btnSetLayout);
+        shimmerLayout = findViewById(R.id.shimmerLayout);
+        tvEmpty = findViewById(R.id.tvEmpty);
         fireStore = new FireStore();
-
         setUpRecyclerView(null);
 
         findViewById(R.id.btnNew).setOnClickListener(view -> startActivity(new Intent(this, NoteDetail.class)));
         findViewById(R.id.btnSetting).setOnClickListener(view -> startActivity(new Intent(this, Settings.class)));
+        btnSetLayout.setOnClickListener(view -> {
+            if (recyclerView.getLayoutManager() instanceof StaggeredGridLayoutManager) {
+                btnSetLayout.setImageResource(R.drawable.ic_list);
+                layout = new GridLayoutManager(this, 1);
+            } else {
+                btnSetLayout.setImageResource(R.drawable.ic_gridview);
+                layout = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+            }
+            recyclerView.setLayoutManager(layout);
+//            setUpRecyclerView(null);
+        });
         btnClear.setOnClickListener(view -> reset());
 
         editSearch = findViewById(R.id.editSearch);
@@ -69,6 +87,7 @@ public class Main extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 btnClear.setVisibility(View.VISIBLE);
+                btnSetLayout.setVisibility(View.GONE);
                 String strSearch = editSearch.getText().toString();
                 setUpRecyclerView(strSearch);
 
@@ -84,10 +103,7 @@ public class Main extends AppCompatActivity {
         });
 
 
-        swipeRefreshLayout.setOnRefreshListener(() -> {
-            reset();
-            swipeRefreshLayout.setRefreshing(false);
-        });
+        swipeRefreshLayout.setOnRefreshListener(() -> reset());
 
     }
 
@@ -95,6 +111,7 @@ public class Main extends AppCompatActivity {
         editSearch.setText("");
         editSearch.clearFocus();
         btnClear.setVisibility(View.GONE);
+        btnSetLayout.setVisibility(View.VISIBLE);
         hideKeyboard();
         setUpRecyclerView(null);
     }
@@ -108,21 +125,27 @@ public class Main extends AppCompatActivity {
         fireStore.getAllDoc("timestamp", new FireStore.OnGetDataListener() {
             @Override
             public void onSuccess(List<Note> noteList) {
-                if (strSearch != null) {
-                    noteList = search(strSearch, noteList);
-                }
+                tvEmpty.setVisibility(View.GONE);
+                if (strSearch != null) noteList = search(strSearch, noteList);
+                if (noteList.isEmpty()) tvEmpty.setVisibility(View.VISIBLE);
                 noteAdapter = new NoteAdapter(Main.this, noteList);
-                recyclerView.setLayoutManager(new GridLayoutManager(Main.this, 2));
+                recyclerView.setLayoutManager(layout);
                 recyclerView.setAdapter(noteAdapter);
+                shimmerLayout.stopShimmerAnimation();
+                swipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
             public void onStart() {
+//                shimmerLayout.startShimmerAnimation();
+                swipeRefreshLayout.setRefreshing(true);
             }
 
             @Override
             public void onFailure() {
-                Toast.makeText(Main.this, "Load data failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Main.this, R.string.load_data_failed, Toast.LENGTH_SHORT).show();
+                shimmerLayout.stopShimmerAnimation();
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
     }
@@ -147,7 +170,9 @@ public class Main extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        if (dataChange == 0) return;
         setUpRecyclerView(null);
+        dataChange = 0;
     }
 }
 

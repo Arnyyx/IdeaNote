@@ -12,6 +12,8 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/transparent</item>
         <!-- Customize your theme here. -->
+        <item name="itemBackground">@color/gray</item>
+
     </style>
 
     <style name="Divider">

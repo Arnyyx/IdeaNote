@@ -4,22 +4,24 @@
     android:id="@+id/view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/padding"
     tools:context=".Controller.NoteDetail">
 
     <ImageView
         android:src="@drawable/ic_back"
         android:id="@+id/btnBack"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding" />
 
     <ImageView
         android:src="@drawable/ic_colors"
-        android:id="@+id/btnColor"
+        android:id="@+id/btnPickColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/margin"
-        android:layout_toStartOf="@+id/btnDelete" />
+        android:layout_toStartOf="@+id/btnDelete"
+        android:padding="@dimen/padding"
+        android:visibility="gone" />
 
     <ImageView
         android:src="@drawable/ic_delete"
@@ -27,49 +29,37 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/margin"
-        android:layout_toStartOf="@+id/btnUndo" />
-
-    <ImageView
-        android:src="@drawable/ic_undo"
-        android:id="@+id/btnUndo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/margin"
-        android:layout_toStartOf="@+id/btnRedo" />
-
-    <ImageView
-        android:src="@drawable/ic_redo"
-        android:id="@+id/btnRedo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/margin"
-        android:layout_toStartOf="@+id/btnSave" />
+        android:layout_toStartOf="@+id/btnSave"
+        android:padding="@dimen/padding" />
 
     <ImageView
         android:src="@drawable/ic_check"
         android:id="@+id/btnSave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true" />
-
+        android:layout_alignParentEnd="true"
+        android:padding="@dimen/padding" />
 
     <EditText
         android:id="@+id/noteTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/btnBack"
+        android:layout_marginHorizontal="@dimen/margin"
         android:layout_marginTop="@dimen/margin"
         android:background="@color/transparent"
-        android:hint="Note title..."
+        android:hint="@string/note_title"
         android:inputType="textCapSentences|textMultiLine"
         android:maxLines="5"
-        android:textSize="@dimen/noteTitle" />
+        android:textSize="@dimen/noteTitle"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/noteTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/noteTitle"
+        android:layout_marginHorizontal="@dimen/margin"
         android:layout_marginVertical="@dimen/itemMargin"
         android:background="@color/transparent"
         android:gravity="top"
@@ -77,13 +67,20 @@
         android:inputType="none"
         android:textSize="@dimen/content" />
 
-    <EditText
-        android:id="@+id/noteSubtile"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/noteTime"
-        android:background="@color/transparent"
-        android:gravity="top"
-        android:hint="Note subtitle..."
-        android:inputType="textCapSentences |textMultiLine" />
+        android:layout_marginBottom="@dimen/margin">
+        <EditText
+            android:id="@+id/noteSubtile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin"
+            android:background="@color/transparent"
+            android:gravity="top"
+            android:hint="@string/note_subtitle"
+            android:inputType="textCapSentences |textMultiLine" />
+    </ScrollView>
+
 </RelativeLayout>
