@@ -10,7 +10,7 @@
     <string name="note_deleted">Đã xoá ghi chú.</string>
     <string name="note_is_not_deleted">Ghi chú chưa được xoá.</string>
     <string name="forgot_password"><u>Quên mật khẩu?</u></string>
-    <string name="change_password">Đổi mật khẩu.</string>
+    <string name="change_password">Đổi mật khẩu</string>
     <string name="password_is_not_valid">Mật khẩu không hợp lệ.</string>
     <string name="passwords_does_not_match">Mật khẩu không trùng khớp.</string>
     <string name="password_updated_successfully">Đã cập nhật mật khẩu.</string>
@@ -32,7 +32,7 @@
     <string name="yes">Có</string>
     <string name="sign_out_message">Bạn có chắc chắn muốn đăng xuất?</string>
     <string name="invalid_password">Mật khẩu không hợp lệ.</string>
-    <string name="sign_out">Đăng xuất.</string>
+    <string name="sign_out">Đăng xuất</string>
     <string name="current_password">Mật khẩu hiện tại.</string>
     <string name="new_password">Mật khẩu mới.</string>
     <string name="confirm_password">Xác nhận mật khẩu.</string>
