@@ -18,9 +18,7 @@ import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class SignIn extends AppCompatActivity {
-
     private EditText editEmail, editPassword;
-
     private FirebaseAuth auth;
     private Button btnSignIn;
     private CircularProgressIndicator progress;
@@ -34,8 +32,6 @@ public class SignIn extends AppCompatActivity {
 
         editEmail = findViewById(R.id.email);
         editPassword = findViewById(R.id.password);
-
-//        findViewById(R.id.btnSignIn).setOnClickListener(view -> clickSignIn());
 
         btnSignIn = findViewById(R.id.btnSignIn);
         progress = findViewById(R.id.progress);
@@ -94,7 +90,7 @@ public class SignIn extends AppCompatActivity {
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             finish();
         }).addOnFailureListener(e -> {
-                Toast.makeText(this, R.string.sign_in_failed, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.sign_in_failed, Toast.LENGTH_SHORT).show();
         }).addOnCompleteListener(command -> stopLoading());
 
     }

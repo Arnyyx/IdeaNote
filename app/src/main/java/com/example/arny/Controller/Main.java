@@ -2,9 +2,12 @@ package com.example.arny.Controller;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -15,7 +18,6 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -25,6 +27,7 @@ import com.example.arny.Adapters.NoteAdapter;
 import com.example.arny.Database.FireStore;
 import com.example.arny.Model.Note;
 import com.example.arny.R;
+import com.example.arny.Utils.LayoutManagerHelper;
 import com.example.arny.Utils.Utility;
 import com.facebook.shimmer.ShimmerFrameLayout;
 
@@ -42,6 +45,7 @@ public class Main extends AppCompatActivity {
     private RecyclerView.LayoutManager layout = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
     public static int dataChange = 0;
     private TextView tvEmpty;
+    SharedPreferences prefs;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,26 +57,30 @@ public class Main extends AppCompatActivity {
         btnClear = findViewById(R.id.btnClear);
         btnSetLayout = findViewById(R.id.btnSetLayout);
         shimmerLayout = findViewById(R.id.shimmerLayout);
+        editSearch = findViewById(R.id.editSearch);
         tvEmpty = findViewById(R.id.tvEmpty);
         fireStore = new FireStore();
         setUpRecyclerView(null);
 
+        prefs = getSharedPreferences("LayoutPreference", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
         findViewById(R.id.btnNew).setOnClickListener(view -> startActivity(new Intent(this, NoteDetail.class)));
         findViewById(R.id.btnSetting).setOnClickListener(view -> startActivity(new Intent(this, Settings.class)));
+        btnClear.setOnClickListener(view -> reset());
         btnSetLayout.setOnClickListener(view -> {
             if (recyclerView.getLayoutManager() instanceof StaggeredGridLayoutManager) {
                 btnSetLayout.setImageResource(R.drawable.ic_list);
                 layout = new GridLayoutManager(this, 1);
+
             } else {
                 btnSetLayout.setImageResource(R.drawable.ic_gridview);
                 layout = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
             }
+            editor.putString("key_layout_manager", LayoutManagerHelper.toString(layout));
+            editor.apply();
             recyclerView.setLayoutManager(layout);
-//            setUpRecyclerView(null);
         });
-        btnClear.setOnClickListener(view -> reset());
-
-        editSearch = findViewById(R.id.editSearch);
         editSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -86,11 +94,11 @@ public class Main extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                btnClear.setVisibility(View.VISIBLE);
-                btnSetLayout.setVisibility(View.GONE);
                 String strSearch = editSearch.getText().toString();
                 setUpRecyclerView(strSearch);
-
+                if (editSearch.getText().toString().isEmpty()) return;
+                btnClear.setVisibility(View.VISIBLE);
+                btnSetLayout.setVisibility(View.GONE);
             }
         });
         editSearch.setOnEditorActionListener((textView, i, keyEvent) -> {
@@ -101,9 +109,7 @@ public class Main extends AppCompatActivity {
             }
             return false;
         });
-
-
-        swipeRefreshLayout.setOnRefreshListener(() -> reset());
+        swipeRefreshLayout.setOnRefreshListener(this::reset);
 
     }
 
@@ -129,7 +135,18 @@ public class Main extends AppCompatActivity {
                 if (strSearch != null) noteList = search(strSearch, noteList);
                 if (noteList.isEmpty()) tvEmpty.setVisibility(View.VISIBLE);
                 noteAdapter = new NoteAdapter(Main.this, noteList);
+
+
+                if (prefs.getString("key_layout_manager", null) != null) {
+                    layout = LayoutManagerHelper.fromString(Main.this, prefs.getString("key_layout_manager", null));
+                    if (layout instanceof GridLayoutManager) {
+                        btnSetLayout.setImageResource(R.drawable.ic_list);
+                    } else {
+                        btnSetLayout.setImageResource(R.drawable.ic_gridview);
+                    }
+                }
                 recyclerView.setLayoutManager(layout);
+
                 recyclerView.setAdapter(noteAdapter);
                 shimmerLayout.stopShimmerAnimation();
                 swipeRefreshLayout.setRefreshing(false);
@@ -173,6 +190,24 @@ public class Main extends AppCompatActivity {
         if (dataChange == 0) return;
         setUpRecyclerView(null);
         dataChange = 0;
+    }
+
+    @Override
+    //Hide keyboard and remove focus edittext when touch outside
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+            if (v instanceof EditText) {
+                Rect outRect = new Rect();
+                v.getGlobalVisibleRect(outRect);
+                if (!outRect.contains((int) event.getRawX(), (int) event.getRawY())) {
+                    v.clearFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
+        }
+        return super.dispatchTouchEvent(event);
     }
 }
 

@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,7 +17,13 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.example.arny.R;
+import com.example.arny.Utils.GlideApp;
 import com.example.arny.Utils.Utility;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.firebase.auth.AuthCredential;
@@ -30,35 +37,29 @@ import java.io.File;
 import java.io.IOException;
 
 public class Settings extends AppCompatActivity {
-    TextView tvEmail;
-    ImageView avt;
-    ShimmerFrameLayout shimmerFrameLayout;
-    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("profile_images").child(user.getUid());
-    Uri imageUri;
+    private ImageView avt;
+    private ShimmerFrameLayout shimmerFrameLayout;
+    private final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private final StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("profile_images").child(user.getUid());
+    private Uri imageUri;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.setting);
 
-        tvEmail = findViewById(R.id.tvEmail);
+        TextView tvEmail = findViewById(R.id.tvEmail);
+        tvEmail.setText(user.getEmail());
         avt = findViewById(R.id.avt);
         shimmerFrameLayout = findViewById(R.id.shimmerLayout);
 
         shimmerFrameLayout.startShimmerAnimation();
-        tvEmail.setText(user.getEmail());
-
-        try {
-            File localFile = File.createTempFile("images", "jpg");
-            storageRef.getFile(localFile).addOnSuccessListener(taskSnapshot -> {
-                Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
-                avt.setImageBitmap(bitmap);
-                shimmerFrameLayout.stopShimmerAnimation();
-            }).addOnFailureListener(exception -> shimmerFrameLayout.stopShimmerAnimation());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if (Splash.localFile != null) {
+            GlideApp.with(avt).load(Splash.localFile).into(avt);
+        } else {
+            GlideApp.with(avt).load(storageRef).into(avt);
         }
+        shimmerFrameLayout.stopShimmerAnimation();
 
         avt.setOnClickListener(view -> selectImage());
         findViewById(R.id.btnBack).setOnClickListener(view -> onBackPressed());
