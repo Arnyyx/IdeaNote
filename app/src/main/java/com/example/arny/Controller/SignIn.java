@@ -7,20 +7,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.arny.R;
-import com.example.arny.Utils.Utility;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class SignIn extends AppCompatActivity {
-
     private EditText editEmail, editPassword;
-
     private FirebaseAuth auth;
     private Button btnSignIn;
     private CircularProgressIndicator progress;
@@ -34,8 +32,6 @@ public class SignIn extends AppCompatActivity {
 
         editEmail = findViewById(R.id.email);
         editPassword = findViewById(R.id.password);
-
-//        findViewById(R.id.btnSignIn).setOnClickListener(view -> clickSignIn());
 
         btnSignIn = findViewById(R.id.btnSignIn);
         progress = findViewById(R.id.progress);
@@ -89,23 +85,14 @@ public class SignIn extends AppCompatActivity {
         String email = editEmail.getText().toString().trim();
         String password = editPassword.getText().toString();
 
-        if (!Utility.isValidEmailAddress(email)) {
-            editEmail.requestFocus();
-            editEmail.setError(getString(R.string.invalid_email_address));
-            stopLoading();
-        } else if (!Utility.isValidPassword(password)) {
-            editPassword.requestFocus();
-            editPassword.setError(getString(R.string.invalid_password));
-            stopLoading();
-        } else {
-            auth.signInWithEmailAndPassword(email, password).addOnSuccessListener(authResult -> {
-                startActivity(new Intent(SignIn.this, Main.class));
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                finish();
-            }).addOnFailureListener(e -> {
-                Toast.makeText(this, R.string.sign_in_failed, Toast.LENGTH_SHORT).show();
-            }).addOnCompleteListener(command -> stopLoading());
-        }
+        auth.signInWithEmailAndPassword(email, password).addOnSuccessListener(authResult -> {
+            startActivity(new Intent(SignIn.this, Main.class));
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            finish();
+        }).addOnFailureListener(e -> {
+            Toast.makeText(this, R.string.sign_in_failed, Toast.LENGTH_SHORT).show();
+        }).addOnCompleteListener(command -> stopLoading());
+
     }
 
     public void stopLoading() {

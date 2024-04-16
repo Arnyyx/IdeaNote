@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Arny</string>
+    <string name="app_name">Idea Note</string>
     <string name="reset_password_description">Quên mật khẩu? Hãy nhập email của bạn. Bạn sẽ nhận được một link qua email để tạo lại mật khẩu.</string>
     <string name="incorrect_email_or_password">Sai tài khoản hoặc mật khẩu.</string>
     <string name="sign_up_successfully">Đăng ký thành công.</string>
@@ -10,7 +10,7 @@
     <string name="note_deleted">Đã xoá ghi chú.</string>
     <string name="note_is_not_deleted">Ghi chú chưa được xoá.</string>
     <string name="forgot_password"><u>Quên mật khẩu?</u></string>
-    <string name="change_password">Đổi mật khẩu.</string>
+    <string name="change_password">Đổi mật khẩu</string>
     <string name="password_is_not_valid">Mật khẩu không hợp lệ.</string>
     <string name="passwords_does_not_match">Mật khẩu không trùng khớp.</string>
     <string name="password_updated_successfully">Đã cập nhật mật khẩu.</string>
@@ -32,13 +32,13 @@
     <string name="yes">Có</string>
     <string name="sign_out_message">Bạn có chắc chắn muốn đăng xuất?</string>
     <string name="invalid_password">Mật khẩu không hợp lệ.</string>
-    <string name="sign_out">Đăng xuất.</string>
+    <string name="sign_out">Đăng xuất</string>
     <string name="current_password">Mật khẩu hiện tại.</string>
     <string name="new_password">Mật khẩu mới.</string>
     <string name="confirm_password">Xác nhận mật khẩu.</string>
     <string name="email">Email.</string>
     <string name="search_notes">Tìm ghi chú…</string>
-    <string name="there_is_no_notes">Không có ghi chú nào.</string>
+    <string name="no_notes">Ấn nút + để tạo ghi chú mới</string>
     <string name="note_title">Tiêu đề…</string>
     <string name="note_subtitle">Nội dung…</string>
     <string name="sign_in">Đăng nhập</string>

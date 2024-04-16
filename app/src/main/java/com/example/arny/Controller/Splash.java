@@ -1,8 +1,6 @@
 package com.example.arny.Controller;
 
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -12,32 +10,36 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.arny.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.storage.FirebaseStorage;
 
-import java.util.Locale;
+import java.io.File;
+import java.io.IOException;
 
 
 public class Splash extends AppCompatActivity {
+    public static File localFile;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash);
 
-        Configuration configuration = getResources().getConfiguration();
-        Locale systemLocale = configuration.locale;
-
-// Set the application locale.
-        Resources resources = getResources();
-        resources.updateConfiguration(configuration, resources.getDisplayMetrics());
-
         new Handler().postDelayed(() -> {
             FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-            if (currentUser == null) {
-                startActivity(new Intent(Splash.this, SignIn.class));
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-            } else {
+            if (currentUser != null) {
                 startActivity(new Intent(Splash.this, Main.class));
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                try {
+                    localFile = File.createTempFile("images", "jpg");
+                    FirebaseStorage.getInstance().getReference().child("profile_images")
+                            .child(currentUser.getUid()).getFile(localFile);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+
+            } else {
+                startActivity(new Intent(Splash.this, SignIn.class));
             }
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             finish();
         }, 1);
     }

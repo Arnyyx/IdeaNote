@@ -16,12 +16,10 @@ import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class SignUp extends AppCompatActivity {
-
     private EditText editEmail, editPassword, editConfirmPassword;
     private FirebaseAuth auth;
     private Button btnSignUp;
     private CircularProgressIndicator progress;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

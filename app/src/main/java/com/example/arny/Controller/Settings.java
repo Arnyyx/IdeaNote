@@ -2,8 +2,6 @@ package com.example.arny.Controller;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.arny.R;
+import com.example.arny.Utils.GlideApp;
 import com.example.arny.Utils.Utility;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.firebase.auth.AuthCredential;
@@ -26,39 +25,30 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.io.File;
-import java.io.IOException;
-
 public class Settings extends AppCompatActivity {
-    TextView tvEmail;
-    ImageView avt;
-    ShimmerFrameLayout shimmerFrameLayout;
-    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("profile_images").child(user.getUid());
-    Uri imageUri;
+    private ImageView avt;
+    private ShimmerFrameLayout shimmerFrameLayout;
+    private final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private final StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("profile_images").child(user.getUid());
+    private Uri imageUri;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.setting);
 
-        tvEmail = findViewById(R.id.tvEmail);
+        TextView tvEmail = findViewById(R.id.tvEmail);
+        tvEmail.setText(user.getEmail());
         avt = findViewById(R.id.avt);
         shimmerFrameLayout = findViewById(R.id.shimmerLayout);
 
         shimmerFrameLayout.startShimmerAnimation();
-        tvEmail.setText(user.getEmail());
-
-        try {
-            File localFile = File.createTempFile("images", "jpg");
-            storageRef.getFile(localFile).addOnSuccessListener(taskSnapshot -> {
-                Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
-                avt.setImageBitmap(bitmap);
-                shimmerFrameLayout.stopShimmerAnimation();
-            }).addOnFailureListener(exception -> shimmerFrameLayout.stopShimmerAnimation());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if (Splash.localFile != null) {
+            GlideApp.with(avt).load(Splash.localFile).into(avt);
+        } else {
+            GlideApp.with(avt).load(storageRef).into(avt);
         }
+        shimmerFrameLayout.stopShimmerAnimation();
 
         avt.setOnClickListener(view -> selectImage());
         findViewById(R.id.btnBack).setOnClickListener(view -> onBackPressed());
@@ -95,7 +85,7 @@ public class Settings extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100 && data != null && data.getData() != null) {
             imageUri = data.getData();
-            avt.setImageURI(imageUri);
+
             uploadImage();
         }
     }
@@ -104,6 +94,7 @@ public class Settings extends AppCompatActivity {
         shimmerFrameLayout.startShimmerAnimation();
         storageRef.putFile(imageUri).addOnSuccessListener(taskSnapshot -> {
             Toast.makeText(this, R.string.upload_successful, Toast.LENGTH_SHORT).show();
+            avt.setImageURI(imageUri);
             shimmerFrameLayout.stopShimmerAnimation();
         }).addOnFailureListener(e -> {
             Toast.makeText(this, R.string.upload_failed, Toast.LENGTH_SHORT).show();

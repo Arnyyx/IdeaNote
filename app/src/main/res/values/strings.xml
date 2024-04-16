@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Arny</string>
+    <string name="app_name">Idea Note</string>
 
     <string name="forgot_password"><u>Forgot password?</u></string>
     <string name="reset_password_description">Forgot your password? Please enter your email address. You will receive a link to create a new password via email.</string>
@@ -41,7 +41,7 @@
     <string name="confirm_password">Confirm password</string>
     <string name="email">Email</string>
     <string name="search_notes">Search notes…</string>
-    <string name="there_is_no_notes">There is no notes</string>
+    <string name="no_notes">Tap the + button to create a new note</string>
     <string name="note_title">Note title…</string>
     <string name="note_subtitle">Note subtitle…</string>
     <string name="sign_in">Sign in</string>
