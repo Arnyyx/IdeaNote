@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Arny</string>
+    <string name="app_name">Idea Note</string>
 
     <string name="forgot_password"><u>Forgot password?</u></string>
     <string name="reset_password_description">Forgot your password? Please enter your email address. You will receive a link to create a new password via email.</string>

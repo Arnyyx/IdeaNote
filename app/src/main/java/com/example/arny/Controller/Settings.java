@@ -2,9 +2,6 @@ package com.example.arny.Controller;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,11 +14,6 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.example.arny.R;
 import com.example.arny.Utils.GlideApp;
 import com.example.arny.Utils.Utility;
@@ -32,9 +24,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-
-import java.io.File;
-import java.io.IOException;
 
 public class Settings extends AppCompatActivity {
     private ImageView avt;
@@ -96,7 +85,7 @@ public class Settings extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100 && data != null && data.getData() != null) {
             imageUri = data.getData();
-            avt.setImageURI(imageUri);
+
             uploadImage();
         }
     }
@@ -105,6 +94,7 @@ public class Settings extends AppCompatActivity {
         shimmerFrameLayout.startShimmerAnimation();
         storageRef.putFile(imageUri).addOnSuccessListener(taskSnapshot -> {
             Toast.makeText(this, R.string.upload_successful, Toast.LENGTH_SHORT).show();
+            avt.setImageURI(imageUri);
             shimmerFrameLayout.stopShimmerAnimation();
         }).addOnFailureListener(e -> {
             Toast.makeText(this, R.string.upload_failed, Toast.LENGTH_SHORT).show();

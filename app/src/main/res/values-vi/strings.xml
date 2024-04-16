@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Arny</string>
+    <string name="app_name">Idea Note</string>
     <string name="reset_password_description">Quên mật khẩu? Hãy nhập email của bạn. Bạn sẽ nhận được một link qua email để tạo lại mật khẩu.</string>
     <string name="incorrect_email_or_password">Sai tài khoản hoặc mật khẩu.</string>
     <string name="sign_up_successfully">Đăng ký thành công.</string>
