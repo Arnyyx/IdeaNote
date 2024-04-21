@@ -55,13 +55,13 @@ public class NoteDetail extends AppCompatActivity {
 
     }
 
-    private void deleteNote(String noteID) {
+    public void deleteNote(String noteID) {
         new AlertDialog.Builder(this)
                 .setIcon(R.drawable.ic_delete)
                 .setTitle(R.string.confirm)
                 .setMessage(R.string.do_you_want_to_delete_this_note)
                 .setPositiveButton(R.string.yes, (dialog, which) -> {
-                    fireStore.deleteDoc(this, noteID);
+                    FireStore.deleteDoc(this, noteID);
                     Main.dataChange = 1;
                     finish();
                 })
@@ -74,6 +74,7 @@ public class NoteDetail extends AppCompatActivity {
         note.setTitle(title.getText().toString());
         note.setSubtitle(subtitle.getText().toString());
         note.setTimestamp(Timestamp.now());
+        note.setPin(false);
         fireStore.setDoc(this, note, noteID);
         Main.dataChange = 1;
         finish();

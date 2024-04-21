@@ -4,10 +4,17 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.Exclude;
 
 public class Note {
+
     private String id, title, subtitle, color;
     private Timestamp timestamp;
+    private boolean pin;
 
     public Note() {
+    }
+
+    public Note(String title, String subtitle) {
+        this.title = title;
+        this.subtitle = subtitle;
     }
 
     @Exclude
@@ -49,5 +56,13 @@ public class Note {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public boolean isPin() {
+        return pin;
+    }
+
+    public void setPin(boolean pin) {
+        this.pin = pin;
     }
 }

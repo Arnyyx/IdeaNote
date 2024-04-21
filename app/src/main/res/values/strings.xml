@@ -41,7 +41,7 @@
     <string name="confirm_password">Confirm password</string>
     <string name="email">Email</string>
     <string name="search_notes">Search notes…</string>
-    <string name="no_notes">Tap the + button to create a new note</string>
+    <string name="no_notes">There is no note</string>
     <string name="note_title">Note title…</string>
     <string name="note_subtitle">Note subtitle…</string>
     <string name="sign_in">Sign in</string>
@@ -51,4 +51,8 @@
     <string name="app_description">A note app by Arny</string>
     <string name="already_have_an_account">Already have an account?.</string>
     <string name="sign_in_failed">Sign in failed</string>
+    <string name="pin">Pin</string>
+    <string name="delete">Delete</string>
+    <string name="time">Time</string>
+    <string name="channel_name">CHANEL_ID_NOTIFICATION</string>
 </resources>

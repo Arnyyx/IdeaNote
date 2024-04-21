@@ -1,8 +1,11 @@
 package com.example.arny.Controller;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,8 +28,11 @@ public class Splash extends AppCompatActivity {
         setContentView(R.layout.splash);
 
         new Handler().postDelayed(() -> {
+            createNotificationChannel();
             FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-            if (currentUser != null) {
+            if (currentUser == null) {
+                startActivity(new Intent(Splash.this, SignIn.class));
+            } else {
                 startActivity(new Intent(Splash.this, Main.class));
                 try {
                     localFile = File.createTempFile("images", "jpg");
@@ -35,12 +41,21 @@ public class Splash extends AppCompatActivity {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-
-            } else {
-                startActivity(new Intent(Splash.this, SignIn.class));
             }
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             finish();
         }, 1);
+    }
+
+    public void createNotificationChannel() {
+        String description = "Some description";
+        int importance = NotificationManager.IMPORTANCE_DEFAULT;
+
+        NotificationChannel channel = new NotificationChannel("CHANNEL_ID_NOTIFICATION",
+                "CHANNEL_ID_NOTIFICATION",
+                importance);
+        channel.setDescription(description);
+        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+        notificationManager.createNotificationChannel(channel);
     }
 }

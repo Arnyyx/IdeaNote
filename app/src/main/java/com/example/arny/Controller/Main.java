@@ -1,5 +1,6 @@
 package com.example.arny.Controller;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -59,11 +60,13 @@ public class Main extends AppCompatActivity {
         shimmerLayout = findViewById(R.id.shimmerLayout);
         editSearch = findViewById(R.id.editSearch);
         tvEmpty = findViewById(R.id.tvEmpty);
-        fireStore = new FireStore();
-        setUpRecyclerView(null);
 
+        fireStore = new FireStore();
         prefs = getSharedPreferences("LayoutPreference", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
+
+        setUpRecyclerView(null);
+//
 
         findViewById(R.id.btnNew).setOnClickListener(view -> startActivity(new Intent(this, NoteDetail.class)));
         findViewById(R.id.btnSetting).setOnClickListener(view -> startActivity(new Intent(this, Settings.class)));
@@ -72,7 +75,6 @@ public class Main extends AppCompatActivity {
             if (recyclerView.getLayoutManager() instanceof StaggeredGridLayoutManager) {
                 btnSetLayout.setImageResource(R.drawable.ic_list);
                 layout = new GridLayoutManager(this, 1);
-
             } else {
                 btnSetLayout.setImageResource(R.drawable.ic_gridview);
                 layout = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
@@ -108,34 +110,40 @@ public class Main extends AppCompatActivity {
                 return true;
             }
             return false;
+
         });
         swipeRefreshLayout.setOnRefreshListener(this::reset);
-
     }
 
-    private void reset() {
-        editSearch.setText("");
-        editSearch.clearFocus();
-        btnClear.setVisibility(View.GONE);
-        btnSetLayout.setVisibility(View.VISIBLE);
-        hideKeyboard();
-        setUpRecyclerView(null);
-    }
 
-    private void hideKeyboard() {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(editSearch.getWindowToken(), 0);
-    }
-
-    private void setUpRecyclerView(String strSearch) {
-        fireStore.getAllDoc("timestamp", new FireStore.OnGetDataListener() {
+    public void setUpRecyclerView(String strSearch) {
+        fireStore.getAllDoc(new FireStore.OnGetDataListener() {
             @Override
             public void onSuccess(List<Note> noteList) {
                 tvEmpty.setVisibility(View.GONE);
                 if (strSearch != null) noteList = search(strSearch, noteList);
                 if (noteList.isEmpty()) tvEmpty.setVisibility(View.VISIBLE);
                 noteAdapter = new NoteAdapter(Main.this, noteList);
+                noteAdapter.setOnItemClickListener(new NoteAdapter.OnMenuItemClicked() {
+                    @Override
+                    public void onClickedPin() {
+                        setUpRecyclerView(strSearch);
+                    }
 
+                    @Override
+                    public void onClickedDelete(String noteID) {
+                        new AlertDialog.Builder(Main.this)
+                                .setIcon(R.drawable.ic_delete)
+                                .setTitle(R.string.confirm)
+                                .setMessage(R.string.do_you_want_to_delete_this_note)
+                                .setPositiveButton(R.string.yes, (dialog, which) -> {
+                                    FireStore.deleteDoc(Main.this, noteID);
+                                    setUpRecyclerView(strSearch);
+                                })
+                                .setNegativeButton(R.string.no, null)
+                                .show();
+                    }
+                });
 
                 if (prefs.getString("key_layout_manager", null) != null) {
                     layout = LayoutManagerHelper.fromString(Main.this, prefs.getString("key_layout_manager", null));
@@ -146,7 +154,6 @@ public class Main extends AppCompatActivity {
                     }
                 }
                 recyclerView.setLayoutManager(layout);
-
                 recyclerView.setAdapter(noteAdapter);
                 shimmerLayout.stopShimmerAnimation();
                 swipeRefreshLayout.setRefreshing(false);
@@ -184,6 +191,22 @@ public class Main extends AppCompatActivity {
         }
     }
 
+
+    private void reset() {
+        editSearch.setText("");
+        editSearch.clearFocus();
+        btnClear.setVisibility(View.GONE);
+        btnSetLayout.setVisibility(View.VISIBLE);
+        hideKeyboard();
+        setUpRecyclerView(null);
+    }
+
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(editSearch.getWindowToken(), 0);
+    }
+
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -212,11 +235,11 @@ public class Main extends AppCompatActivity {
 }
 
 //Todo Item ClickListener ✓
-//Todo Pin note
+//Todo Pin note ✓
 //Todo Search
 //Todo Arrange
 //Todo Setting
-//Todo Set Layout
+//Todo Set Layout ✓
 //Todo add image
 //Todo Notes color
 //Todo Upload App
