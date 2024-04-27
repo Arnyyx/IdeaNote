@@ -1,6 +1,4 @@
 # Idea Note
-
-# Introduction
 Idea Note is a simple and easy-to-use note-taking application developed by Arny. This application helps you record your ideas and important information quickly and efficiently.
 
 # Features
