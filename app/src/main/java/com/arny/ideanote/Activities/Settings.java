@@ -18,6 +18,7 @@ import com.arny.ideanote.R;
 import com.arny.ideanote.Utils.GlideApp;
 import com.arny.ideanote.Utils.Utility;
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
@@ -58,8 +59,7 @@ public class Settings extends AppCompatActivity {
     }
 
     private void clickSignOut() {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setCancelable(true)
+        new MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.sign_out)
                 .setMessage(R.string.sign_out_message)
                 .setPositiveButton(R.string.sign_out, (dialogInterface, i) -> {
@@ -68,10 +68,8 @@ public class Settings extends AppCompatActivity {
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                 })
-                .setNeutralButton(R.string.cancel, (dialog, id) -> dialog.cancel());
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.setCanceledOnTouchOutside(true);
-        alertDialog.show();
+                .setNeutralButton(R.string.cancel, (dialog, id) -> dialog.cancel())
+                .show();
     }
 
     private void selectImage() {
@@ -86,7 +84,6 @@ public class Settings extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100 && data != null && data.getData() != null) {
             imageUri = data.getData();
-
             uploadImage();
         }
     }
@@ -110,14 +107,14 @@ public class Settings extends AppCompatActivity {
         final EditText editNewPassword = promptsView.findViewById(R.id.editNewPassword);
         final EditText editConfirmPassword = promptsView.findViewById(R.id.editConfirmPassword);
 
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        MaterialAlertDialogBuilder alertDialogBuilder = new MaterialAlertDialogBuilder(this);
         alertDialogBuilder.setView(promptsView);
         alertDialogBuilder.setCancelable(true)
                 .setTitle(R.string.change_password)
                 .setPositiveButton(R.string.save, null)
                 .setNeutralButton(R.string.cancel, (dialog, id) -> dialog.cancel());
 
-        AlertDialog alertDialog = alertDialogBuilder.create();
+        androidx.appcompat.app.AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.setCanceledOnTouchOutside(true);
         alertDialog.show();
         alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(view -> {
@@ -125,8 +122,10 @@ public class Settings extends AppCompatActivity {
                     newPassword = editNewPassword.getText().toString(),
                     confirmPassword = editConfirmPassword.getText().toString();
             if (!Utility.isValidPassword(newPassword)) {
+                editNewPassword.requestFocus();
                 editNewPassword.setError(getString(R.string.password_is_not_valid));
             } else if (!newPassword.equals(confirmPassword)) {
+                editNewPassword.requestFocus();
                 editConfirmPassword.setError(getString(R.string.passwords_does_not_match));
             } else {
                 AuthCredential credential = EmailAuthProvider.getCredential(user.getEmail(), currentPassword);

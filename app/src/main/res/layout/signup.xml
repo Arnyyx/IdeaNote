@@ -110,13 +110,13 @@
                     android:layout_height="wrap_content"
                     android:text="@string/already_have_an_account" />
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/textSignIn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="@dimen/padding"
                     android:text="@string/sign_in"
-                    android:textColor="@color/purple_200" />
+                    android:textColor="?attr/colorPrimary" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

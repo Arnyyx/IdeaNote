@@ -1,12 +1,10 @@
 package com.arny.ideanote.Activities;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,6 +16,7 @@ import com.arny.ideanote.Model.Note;
 import com.arny.ideanote.R;
 import com.arny.ideanote.Utils.Utility;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.Timestamp;
 
 public class NoteDetail extends AppCompatActivity {
@@ -68,7 +67,6 @@ public class NoteDetail extends AppCompatActivity {
             switch (checkedId) {
                 case R.id.radioButtonRed:
                     Toast.makeText(this, "Red", Toast.LENGTH_SHORT).show();
-                    RadioButton radioButton = findViewById(checkedId);
                     break;
                 case R.id.radioButtonOrange:
                     //Implement logic
@@ -79,7 +77,7 @@ public class NoteDetail extends AppCompatActivity {
     }
 
     public void deleteNote(String noteID) {
-        new AlertDialog.Builder(this)
+        new MaterialAlertDialogBuilder(this)
                 .setIcon(R.drawable.ic_delete)
                 .setTitle(R.string.confirm)
                 .setMessage(R.string.do_you_want_to_delete_this_note)
