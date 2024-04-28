@@ -4,41 +4,40 @@
     android:id="@+id/view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Controller.NoteDetail">
+    tools:context=".Activities.NoteDetail">
 
     <ImageView
-        android:src="@drawable/ic_back"
         android:id="@+id/btnBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="@dimen/padding" />
+        android:padding="@dimen/padding"
+        android:src="@drawable/ic_back" />
 
     <ImageView
-        android:src="@drawable/ic_colors"
         android:id="@+id/btnPickColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/margin"
         android:layout_toStartOf="@+id/btnDelete"
         android:padding="@dimen/padding"
-        android:visibility="gone" />
+        android:src="@drawable/ic_colors" />
 
     <ImageView
-        android:src="@drawable/ic_delete"
         android:id="@+id/btnDelete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/margin"
         android:layout_toStartOf="@+id/btnSave"
-        android:padding="@dimen/padding" />
+        android:padding="@dimen/padding"
+        android:src="@drawable/ic_delete" />
 
     <ImageView
-        android:src="@drawable/ic_check"
         android:id="@+id/btnSave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:padding="@dimen/padding" />
+        android:padding="@dimen/padding"
+        android:src="@drawable/ic_check" />
 
     <EditText
         android:id="@+id/noteTitle"
@@ -72,6 +71,7 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/noteTime"
         android:layout_marginBottom="@dimen/margin">
+
         <EditText
             android:id="@+id/noteSubtile"
             android:layout_width="match_parent"

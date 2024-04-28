@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.arny'
+    namespace 'com.arny.ideanote'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.example.arny"
+        applicationId 'com.arny.ideanote'
         minSdk 29
         targetSdk 34
         versionCode 1
@@ -36,16 +36,16 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.11.0'
 
-    implementation 'com.firebaseui:firebase-ui-storage:7.2.0'
+    implementation 'com.firebaseui:firebase-ui-storage:8.0.2'
     implementation 'com.firebaseui:firebase-ui-firestore:8.0.2'
     implementation 'com.google.firebase:firebase-firestore:24.11.1'
     implementation 'com.google.firebase:firebase-auth-ktx:22.3.1'
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-storage:20.3.0'
-    implementation platform('com.google.firebase:firebase-bom:32.2.3')
+    implementation platform('com.google.firebase:firebase-bom:32.8.1')
 
-    implementation 'com.github.bumptech.glide:glide:4.12.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
+    implementation 'com.github.bumptech.glide:glide:4.16.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.16.0'
 
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     testImplementation 'junit:junit:4.13.2'
@@ -53,8 +53,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
-
-    implementation 'com.facebook.shimmer:shimmer:0.1.0@aar'
-
-    implementation group: 'javax.mail', name: 'mail', version: '1.4'
+    implementation 'com.facebook.shimmer:shimmer:0.5.0@aar'
+    implementation group: 'javax.mail', name: 'mail', version: '1.4.7'
 }

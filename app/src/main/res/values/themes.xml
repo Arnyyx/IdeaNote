@@ -1,6 +1,6 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="Theme.Arny" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.Arny" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/orange</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
@@ -14,6 +14,7 @@
         <item name="android:windowLightStatusBar">true</item>
         <!-- Customize your theme here. -->
         <item name="itemBackground">@color/gray</item>
+        <item name="colorSurface">#fff8f4</item>
     </style>
 
     <style name="Divider">
