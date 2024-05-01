@@ -5,33 +5,26 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:src="@drawable/ic_back"
         android:id="@+id/btnBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="@dimen/padding" />
+        android:padding="@dimen/padding"
+        android:src="@drawable/ic_back" />
 
-    <com.facebook.shimmer.ShimmerFrameLayout
-        android:id="@+id/shimmerLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/avt"
+        android:layout_width="100sp"
+        android:layout_height="100sp"
         android:layout_below="@+id/btnBack"
-        android:layout_centerHorizontal="true">
-        <com.google.android.material.imageview.ShapeableImageView
-            android:src="@drawable/ic_user"
-            android:id="@+id/avt"
-            android:layout_width="100sp"
-            android:layout_height="100sp"
-            android:layout_below="@+id/btnBack"
-            android:layout_centerHorizontal="true"
-            app:shapeAppearanceOverlay="@style/circle" />
-    </com.facebook.shimmer.ShimmerFrameLayout>
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/ic_user"
+        app:shapeAppearanceOverlay="@style/circle" />
 
     <TextView
         android:id="@+id/tvEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/shimmerLayout"
+        android:layout_below="@+id/avt"
         android:layout_marginTop="@dimen/margin"
         android:gravity="center"
         android:text="@string/email"

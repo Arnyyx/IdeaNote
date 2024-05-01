@@ -50,8 +50,8 @@ public class SignUp extends AppCompatActivity {
             editEmail.setError(getText(R.string.invalid_email_address));
             editEmail.setError(getText(R.string.invalid_email_address));
             stopLoading();
-        } else if (!Utility.isValidPassword(password)) {
-            editPassword.setError(getText(R.string.invalid_password));
+        } else if (!Utility.checkValidPassword(editPassword)) {
+//            editPassword.setError(getText(R.string.invalid_password));
             stopLoading();
         } else if (!password.equals(confirmPassword)) {
             editConfirmPassword.setError(getText(R.string.passwords_does_not_match));

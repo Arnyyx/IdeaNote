@@ -2,6 +2,8 @@ package com.arny.ideanote.Activities;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,7 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.arny.ideanote.R;
 import com.arny.ideanote.Utils.GlideApp;
 import com.arny.ideanote.Utils.Utility;
-import com.facebook.shimmer.ShimmerFrameLayout;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
@@ -26,9 +28,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
+import java.io.FileInputStream;
+
 public class Settings extends AppCompatActivity {
     private ImageView avt;
-    private ShimmerFrameLayout shimmerFrameLayout;
     private final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private final StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("profile_images").child(user.getUid());
     private Uri imageUri;
@@ -41,16 +45,24 @@ public class Settings extends AppCompatActivity {
         TextView tvEmail = findViewById(R.id.tvEmail);
         tvEmail.setText(user.getEmail());
         avt = findViewById(R.id.avt);
-        shimmerFrameLayout = findViewById(R.id.shimmerLayout);
 
-        shimmerFrameLayout.startShimmer();
-
-        if (Splash.localFile != null) {
-            GlideApp.with(avt).load(Splash.localFile).into(avt);
-        } else {
-            GlideApp.with(avt).load(storageRef).into(avt);
+        try {
+            File f = Splash.dir;
+            Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
+            GlideApp.with(avt)
+                    .load(b)
+                    .placeholder(R.drawable.ic_user)
+                    .error(R.drawable.ic_user)
+                    .transform(new CircleCrop())
+                    .into(avt);
+        } catch (Exception e) {
+            GlideApp.with(avt)
+                    .load(storageRef)
+                    .placeholder(R.drawable.ic_user)
+                    .error(R.drawable.ic_user)
+                    .transform(new CircleCrop())
+                    .into(avt);
         }
-        shimmerFrameLayout.hideShimmer();
 
         avt.setOnClickListener(view -> selectImage());
         findViewById(R.id.btnBack).setOnClickListener(view -> onBackPressed());
@@ -89,14 +101,11 @@ public class Settings extends AppCompatActivity {
     }
 
     private void uploadImage() {
-        shimmerFrameLayout.startShimmer();
         storageRef.putFile(imageUri).addOnSuccessListener(taskSnapshot -> {
             Toast.makeText(this, R.string.upload_successful, Toast.LENGTH_SHORT).show();
             avt.setImageURI(imageUri);
-            shimmerFrameLayout.hideShimmer();
         }).addOnFailureListener(e -> {
             Toast.makeText(this, R.string.upload_failed, Toast.LENGTH_SHORT).show();
-            shimmerFrameLayout.hideShimmer();
         });
     }
 
@@ -121,10 +130,7 @@ public class Settings extends AppCompatActivity {
             String currentPassword = editCurrentPassword.getText().toString(),
                     newPassword = editNewPassword.getText().toString(),
                     confirmPassword = editConfirmPassword.getText().toString();
-            if (!Utility.isValidPassword(newPassword)) {
-                editNewPassword.requestFocus();
-                editNewPassword.setError(getString(R.string.password_is_not_valid));
-            } else if (!newPassword.equals(confirmPassword)) {
+            if (Utility.checkValidPassword(editNewPassword) || !newPassword.equals(confirmPassword)) {
                 editNewPassword.requestFocus();
                 editConfirmPassword.setError(getString(R.string.passwords_does_not_match));
             } else {

@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.Editable;
@@ -59,7 +60,7 @@ public class Main extends AppCompatActivity {
         shimmerLayout = findViewById(R.id.shimmerLayout);
         editSearch = findViewById(R.id.editSearch);
         tvEmpty = findViewById(R.id.tvEmpty);
-
+        ColorStateList a = recyclerView.getBackgroundTintList();
         shimmerLayout.hideShimmer();
 
         fireStore = new FireStore();
@@ -200,7 +201,6 @@ public class Main extends AppCompatActivity {
         dataChange = 0;
     }
 
-  
 
     private void reset() {
         editSearch.setText("");

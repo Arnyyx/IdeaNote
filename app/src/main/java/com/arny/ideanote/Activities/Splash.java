@@ -3,6 +3,8 @@ package com.arny.ideanote.Activities;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -15,16 +17,17 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
 
 import java.io.File;
-import java.io.IOException;
+import java.io.FileOutputStream;
 
 
 public class Splash extends AppCompatActivity {
-    public static File localFile;
+    public static File dir;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash);
+
 
         new Handler().postDelayed(() -> {
             createNotificationChannel();
@@ -33,13 +36,7 @@ public class Splash extends AppCompatActivity {
                 startActivity(new Intent(Splash.this, SignIn.class));
             } else {
                 startActivity(new Intent(Splash.this, Main.class));
-                try {
-                    localFile = File.createTempFile("images", "jpg");
-                    FirebaseStorage.getInstance().getReference().child("profile_images")
-                            .child(currentUser.getUid()).getFile(localFile);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+                saveProfilePicture(currentUser);
             }
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             finish();
@@ -57,4 +54,25 @@ public class Splash extends AppCompatActivity {
         NotificationManager notificationManager = getSystemService(NotificationManager.class);
         notificationManager.createNotificationChannel(channel);
     }
+
+    private void saveProfilePicture(FirebaseUser currentUser) {
+        dir = new File(this.getFilesDir(), currentUser.getUid());
+        if (!dir.exists()) {
+            dir.getParentFile().mkdirs();
+        }
+        final long ONE_MEGABYTE = 1024 * 1024 * 10;
+        FirebaseStorage.getInstance().getReference().child("profile_images")
+                .child(currentUser.getUid()).getBytes(ONE_MEGABYTE).addOnSuccessListener(bytes -> {
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    try {
+                        FileOutputStream fos = new FileOutputStream(dir);
+                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                        fos.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+
 }

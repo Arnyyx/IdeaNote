@@ -3,6 +3,7 @@ package com.arny.ideanote.Utils;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.widget.EditText;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
@@ -52,17 +53,35 @@ public class Utility {
         return new SimpleDateFormat("HH:mm - dd/MM/yyyy", Locale.getDefault()).format(timestamp.toDate());
     }
 
-    public static boolean isValidPassword(String password) {
+    public static boolean checkValidPassword(EditText editText) {
+        String password = editText.getText().toString();
+        if (password == null || password.isEmpty()) {
+            editText.requestFocus();
+            editText.setError("Password cannot be empty");
+            return false;
+        }
+
         String regex = "^(?=.*[0-9])"
-                + "(?=.*[a-z])(?=.*[A-Z])"
+                + "(?=.*[a-z])"
+                + "(?=.*[A-Z])"
                 + "(?=.*[@#$%^&+=!])"
                 + "(?=\\S+$).{8,20}$";
         Pattern p = Pattern.compile(regex);
-        if (password == null) {
+        Matcher m = p.matcher(password);
+
+        if (!m.matches()) {
+            String errorMessage = "Password must meet the following requirements:\n" +
+                    "- At least one digit (0-9).\n" +
+                    "- At least one lowercase letter (a-z).\n" +
+                    "- At least one uppercase letter (A-Z).\n" +
+                    "- At least one special symbol (@#$%^&+=!).\n" +
+                    "- No whitespace characters.\n" +
+                    "- Length between 8 and 20 characters.\n";
+            editText.requestFocus();
+            editText.setError(errorMessage);
             return false;
         }
-        Matcher m = p.matcher(password);
-        return m.matches();
+        return true;
     }
 
     public static boolean isValidEmailAddress(String email) {
